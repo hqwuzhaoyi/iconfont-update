@@ -1,35 +1,14 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
+import { ResultType } from '../Form';
 
-const oldCode = `
-{
-  "name": "Original name",
-  "description": null,
-  "asd": 1,
-  1
-}
-`;
-const newCode = `
-{
-  "name": "My updated name",
-  "description": "Brand new description",
-  "status": "running",
-  "asd": 1,
-  1
-}
-`;
-
-class Diff extends PureComponent {
-  render = () => {
-    return (
-      <ReactDiffViewer
-        oldValue={oldCode}
-        newValue={newCode}
-        compareMethod={DiffMethod.WORDS}
-        splitView={true}
-      />
-    );
-  };
-}
-
-export default Diff;
+export const Code = ({ diffJson }: { diffJson: ResultType }) => {
+  return (
+    <ReactDiffViewer
+      oldValue={diffJson.result.diff.newCode}
+      newValue={diffJson.result.diff.oldCode}
+      compareMethod={DiffMethod.WORDS}
+      splitView={true}
+    />
+  );
+};

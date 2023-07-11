@@ -42,7 +42,8 @@ import {
 } from '@/components/ui/collapsible';
 import { ChevronsUpDown } from 'lucide-react';
 import { CardWithForm } from './steps/Create';
-import Diff from './steps/Code';
+import { Code } from './steps/Code';
+import { DiffResult } from 'simple-git';
 
 const iconTypeArr = [
   { title: 'sdata_office_UI', value: 'iconOffice' },
@@ -72,8 +73,41 @@ const formSchema = z.object({
 
 export type FormInterface = z.infer<typeof formSchema>;
 
+export type ResultType = {
+  result: {
+    diff: {
+      oldCode: string;
+      newCode: string;
+    };
+    summary: DiffResult;
+  };
+};
+
 export default function FormPage() {
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const [diffJson, setDiffJson] = React.useState<ResultType>({
+    result: {
+      diff: {
+        oldCode: '-- a/parseToQbit.ts',
+        newCode: '++ b/parseToQbit.ts\n123',
+      },
+      summary: {
+        changed: 1,
+        deletions: 0,
+        insertions: 1,
+        files: [
+          {
+            file: 'parseToQbit.ts',
+            changes: 1,
+            insertions: 1,
+            deletions: 0,
+            binary: false,
+          },
+        ],
+      },
+    },
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -98,7 +132,7 @@ export default function FormPage() {
       method: 'GET',
     })
       .then((response) => response.json())
-      .then((json) => console.log(json))
+      .then((json: ResultType) => setDiffJson(json))
       .catch((err) => console.log('Request Failed', err));
   }
   return (
@@ -178,7 +212,7 @@ export default function FormPage() {
           </Card>
         </form>
       </Form>
-      {/* <Diff /> */}
+      {diffJson && <Code diffJson={diffJson} />}
     </main>
   );
 }
