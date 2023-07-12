@@ -40,17 +40,17 @@ export async function GET(request: Request) {
   console.debug('branch', branch);
   console.debug('code', code);
   console.debug('project', project);
-  if (fs.existsSync(path.join(process.cwd(), 'rss'))) {
-    fs.rmdirSync(path.join(process.cwd(), 'rss'), { recursive: true });
+  if (fs.existsSync(path.join(process.cwd(), 'icon'))) {
+    fs.rmdirSync(path.join(process.cwd(), 'icon'), { recursive: true });
   }
-  await git.clone('git@github.com:hqwuzhaoyi/rss.git', 'rss', [
+  await git.clone('git@10.15.111.8:plugins1/sdata-icon.git', 'icon', [
     '--branch',
-    'main',
+    'master',
     '--single-branch',
   ]);
 
   const options: Partial<SimpleGitOptions> = {
-    baseDir: path.join(process.cwd(), 'rss'),
+    baseDir: path.join(process.cwd(), 'icon'),
     binary: 'git',
     maxConcurrentProcesses: 6,
     trimmed: false,
@@ -58,9 +58,12 @@ export async function GET(request: Request) {
 
   const targetGit: SimpleGit = simpleGit(options);
 
-  execSync('echo 123 >> parseToQbit.ts', {
-    cwd: path.join(process.cwd(), 'rss'),
-  });
+  execSync(
+    `node ./scripts/downloadIcon.js --iconCode=${code} --iconProject=${project}`,
+    {
+      cwd: path.join(process.cwd(), 'icon'),
+    },
+  );
 
   const diff = await targetGit.diff();
   const summary = await targetGit.diffSummary();

@@ -7,7 +7,7 @@ export const Code = ({ diffJson }: { diffJson: ResultType }) => {
     <ReactDiffViewer
       oldValue={diffJson.result.diff.newCode}
       newValue={diffJson.result.diff.oldCode}
-      compareMethod={DiffMethod.WORDS}
+      compareMethod={DiffMethod.LINES}
       splitView={true}
     />
   );
