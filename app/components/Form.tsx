@@ -1,5 +1,5 @@
-'use client';
-import * as React from 'react';
+"use client";
+import * as React from "react";
 
 import {
   Card,
@@ -8,21 +8,21 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
-import * as z from 'zod';
+import * as z from "zod";
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -31,19 +31,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { useForm } from 'react-hook-form';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { cn } from "@/lib/utils";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import { ChevronsUpDown } from 'lucide-react';
-import { CardWithForm } from './steps/Create';
-import { Code } from './steps/Code';
-import { DiffResult, PushResult } from 'simple-git';
+} from "@/components/ui/collapsible";
+import { ChevronsUpDown } from "lucide-react";
+import { CardWithForm } from "./steps/Create";
+import { Code } from "./steps/Code";
+import { DiffResult, PushResult } from "simple-git";
 
 import {
   Dialog,
@@ -52,37 +52,37 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { useToast } from '@/components/ui/use-toast';
+} from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
 
 const iconTypeArr = [
-  { title: 'sdata_office_UI', value: 'iconOffice' },
-  { title: '所有图标', value: 'iconOrigin' },
-  { title: '设计态应用图标', value: 'iconOfficeV2' },
-  { title: '移动端图标', value: 'iconForMobile' },
-  { title: 'SRUi-V3', value: 'SRUi-V3' },
-  { title: 'Sr-双色图标', value: 'SrBicolorIcon' },
-  { title: 'SR-图标库-双色', value: 'SRLib-Bicolor' },
-  { title: 'SR-图标库-线性', value: 'SRLib-Line' },
-  { title: 'SR-图标库-面性', value: 'SRLib-Surface' },
-  { title: 'SR-baseicon', value: 'SRUi-Base' },
-  { title: 'SR-coloricon', value: 'SRUi-Color' },
+  { title: "sdata_office_UI", value: "iconOffice" },
+  { title: "所有图标", value: "iconOrigin" },
+  { title: "设计态应用图标", value: "iconOfficeV2" },
+  { title: "移动端图标", value: "iconForMobile" },
+  { title: "SRUi-V3", value: "SRUi-V3" },
+  { title: "Sr-双色图标", value: "SrBicolorIcon" },
+  { title: "SR-图标库-双色", value: "SRLib-Bicolor" },
+  { title: "SR-图标库-线性", value: "SRLib-Line" },
+  { title: "SR-图标库-面性", value: "SRLib-Surface" },
+  { title: "SR-baseicon", value: "SRUi-Base" },
+  { title: "SR-coloricon", value: "SRUi-Color" },
 ];
 
 const formSchema = z.object({
   branch: z
     .string()
     .min(5, {
-      message: '不能少于5个字符',
+      message: "不能少于5个字符",
     })
-    .refine((val) => val !== 'master', {
-      message: '分支不能为master',
+    .refine((val) => val !== "master", {
+      message: "分支不能为master",
     }),
   code: z.string().min(5, {
-    message: '不能少于5个字符',
+    message: "不能少于5个字符",
   }),
   project: z.string({
-    required_error: '请选择图标库.',
+    required_error: "请选择图标库.",
   }),
 });
 
@@ -105,17 +105,13 @@ function DemoContainer({
   return (
     <div
       className={cn(
-        'flex items-center justify-center [&>div]:w-full',
-        className,
+        "flex items-center justify-center [&>div]:w-full",
+        className
       )}
       {...props}
     />
   );
 }
-
-const currentHostname = window.location.hostname;
-const currentPort = window.location.port;
-const host = `${currentHostname}:${currentPort}`;
 
 export default function FormPage() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -127,13 +123,26 @@ export default function FormPage() {
     defaultValues: {},
   });
 
+  const getUrl = (url: any) => {
+    if (typeof window !== "undefined") {
+      const currentHostname = (window as Window).location.hostname;
+      const currentPort = (window as Window).location.port;
+      const host = `http://${currentHostname}:${currentPort}${url}`;
+      return host;
+    }
+    return url;
+  };
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
-    let url = new URL(`http://${host}/api`);
+    const currentHostname = window.location.hostname;
+    const currentPort = window.location.port;
+    const host = `${currentHostname}:${currentPort}`;
+    let url = new URL(getUrl("/api"));
     let params: any = values;
-    let keysToAdd = ['branch', 'code', 'project'];
+    let keysToAdd = ["branch", "code", "project"];
 
     keysToAdd.forEach((key) => {
       if (params.hasOwnProperty(key)) {
@@ -142,18 +151,22 @@ export default function FormPage() {
     });
 
     fetch(url, {
-      method: 'GET',
+      method: "GET",
     })
       .then((response) => response.json())
       .then((json: ResultType) => setDiffJson(json))
-      .catch((err) => console.log('Request Failed', err));
+      .catch((err) => console.log("Request Failed", err));
   }
 
   function handleMergeRequest() {
+    const currentHostname = window.location.hostname;
+    const currentPort = window.location.port;
+    const host = `${currentHostname}:${currentPort}`;
     const values = form.getValues();
-    let url = new URL(`http://${host}/push/api`);
+    let url = new URL(getUrl("/push/api"));
+
     let params: any = values;
-    let keysToAdd = ['branch', 'code', 'project'];
+    let keysToAdd = ["branch", "code", "project"];
 
     keysToAdd.forEach((key) => {
       if (params.hasOwnProperty(key)) {
@@ -162,12 +175,12 @@ export default function FormPage() {
     });
 
     fetch(url, {
-      method: 'GET',
+      method: "GET",
     })
       .then((response) => response.json())
       .then((json: PushResult) => {
         toast({
-          title: 'Merge Request',
+          title: "Merge Request",
           description: (
             <Button
               variant="link"
@@ -175,18 +188,18 @@ export default function FormPage() {
                 window.open(json.remoteMessages.pullRequestUrl);
               }}
             >
-              Link
+              {json.remoteMessages.pullRequestUrl}
             </Button>
           ),
         });
         setDiffJson(undefined);
       })
       .catch((err) => {
-        console.log('Request Failed', err);
+        console.log("Request Failed", err);
         toast({
-          variant: 'destructive',
-          title: 'Uh oh! Something went wrong.',
-          description: '发起合并失败.',
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "发起合并失败.",
         });
       });
   }
