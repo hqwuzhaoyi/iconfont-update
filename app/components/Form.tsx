@@ -113,6 +113,10 @@ function DemoContainer({
   );
 }
 
+const currentHostname = window.location.hostname;
+const currentPort = window.location.port;
+const host = `${currentHostname}:${currentPort}`;
+
 export default function FormPage() {
   const [isOpen, setIsOpen] = React.useState(false);
   const { toast } = useToast();
@@ -127,7 +131,7 @@ export default function FormPage() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
-    let url = new URL('/api');
+    let url = new URL(`http://${host}/api`);
     let params: any = values;
     let keysToAdd = ['branch', 'code', 'project'];
 
@@ -147,7 +151,7 @@ export default function FormPage() {
 
   function handleMergeRequest() {
     const values = form.getValues();
-    let url = new URL('/push/api');
+    let url = new URL(`http://${host}/push/api`);
     let params: any = values;
     let keysToAdd = ['branch', 'code', 'project'];
 
