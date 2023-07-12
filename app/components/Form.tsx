@@ -233,7 +233,9 @@ export default function FormPage() {
                               {...field}
                             />
                           </FormControl>
-                          <FormDescription>请输入你的分支号</FormDescription>
+                          <FormDescription className="pb-4">
+                            请输入你的分支号
+                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -247,7 +249,7 @@ export default function FormPage() {
                           <FormControl>
                             <Input id="code" placeholder="更新码" {...field} />
                           </FormControl>
-                          <FormDescription>
+                          <FormDescription className="pb-4">
                             请输入你的github更新码
                           </FormDescription>
                           <FormMessage />
@@ -279,7 +281,7 @@ export default function FormPage() {
                               </FormControl>
                             </Select>
                           </FormControl>
-                          <FormDescription>请选择图标库</FormDescription>
+                          <FormDescription className="pb-4">请选择图标库</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
