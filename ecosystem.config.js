@@ -1,3 +1,4 @@
+// ecosystem.config.js
 module.exports = {
   apps: [
     {
@@ -8,11 +9,11 @@ module.exports = {
       args: "start",
       env_local: {
         APP_ENV: "local", // APP_ENV=local
-        PORT: 3006,
+        PORT: 3000,
       },
       env_development: {
         APP_ENV: "dev", // APP_ENV=dev
-        PORT: 3006,
+        PORT: 3000,
       },
       env_production: {
         APP_ENV: "prod", // APP_ENV=prod
